@@ -7,7 +7,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="home-page">
@@ -31,11 +31,14 @@
       <div class="hero-text">
         <p class="eyebrow">Welcome</p>
         <h1>Jeffrey Ming Han Li</h1>
-        <p class="lead">
-         Hi, I am Jeffrey. Thanks for visiting my website.
-         I am an undergraduate Engineering Science student at the University of Toronto, specializing in Engineering Physics.
-         Scroll down for my background, research focus, and current projects.
+        <p class="hero-focus-line">
+          <span>Quantum Optics</span><span class="focus-dot" aria-hidden="true">&bull;</span><span>Photonics</span><span class="focus-dot" aria-hidden="true">&bull;</span><span>Quantum Information</span>
         </p>
+        <!-- <p class="lead">
+         Hi, I am Jeffrey, a third-year Engineering Physics student at the University of Toronto.
+         I work on quantum optics, quantum information, and quantum-ML systems.
+         Scroll down for my background, research work, and ongoing projects.
+        </p> -->
         <div class="social-row social-icons">
           <a class="social-icon-link" href="https://www.linkedin.com/in/jeffrey-ming-han-li-a33126248/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -51,7 +54,7 @@
             </svg>
             <span class="sr-only">GitHub</span>
           </a>
-          <a class="social-icon-link" href="mailto:jeffreymhli2288@gmail.com" aria-label="Email">
+          <a class="social-icon-link" href="mailto:jeffreymh.li@mail.utoronto.ca" aria-label="Email">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M3 6.75A2.25 2.25 0 0 1 5.25 4.5h13.5A2.25 2.25 0 0 1 21 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 17.25V6.75Zm2.07-.75L12 11.12 18.93 6H5.07ZM19.5 7.42l-5.94 4.39a2.63 2.63 0 0 1-3.12 0L4.5 7.42v9.83c0 .41.34.75.75.75h13.5c.41 0 .75-.34.75-.75V7.42Z"></path>
             </svg>
@@ -59,58 +62,71 @@
           </a>
         </div>
       </div>
-      <div class="hero-photo-wrap">
-        <img src="assets/jeffrey.jpg" alt="Profile photo" class="hero-photo">
-      </div>
       <a href="#about-me" class="scroll-next" aria-label="Go to About Me section">
         <span class="scroll-next-label">Scroll</span>
         <span class="scroll-next-arrow" aria-hidden="true">&#8595;</span>
       </a>
     </section>
 
-    <section id="about-me" class="content-section">
-      <h2>About Me</h2>
-      <p>
-        I am currently pursuing Engineering Science (Engineering Physics) at the University of Toronto.
-        My interests sit at the intersection of quantum computing, quantum information, and machine learning.
-      </p>
-      <p>
-        I enjoy building strong technical foundations while working on practical projects.
-        Outside of coursework, I spend time reading papers, implementing ideas, and documenting what I learn.
-      </p>
-      <ul>
-        <li>Current focus: quantum algorithms and applied ML for scientific problems</li>
-        <li>Working style: theory-first understanding, then implementation and evaluation</li>
-        <li>Goal: contribute to reliable, high-impact research and engineering</li>
-      </ul>
-    </section>
+    <section id="about-me" class="content-section about-me-section">
+      <div class="about-me-grid">
+        <div class="about-me-copy">
+          <h2>About Me</h2>
+          <p>
+            I am a third-year undergraduate student at the University of Toronto, pursuing
+            a Bachelor of Applied Science in Engineering Physics.
+          </p>
 
+          <p>
+            I am fortunate to be a research intern at CQIQC, UofT working with Prof. Boris Braverman.
+            My research interests lie at the intersection of quantum optics, photonics, and quantum computation hardware.
+          </p>
+          <div class="about-pill-row">
+            <span class="about-pill">BASc Engineering Physics - University of Toronto</span>
+            <span class="about-pill">Toronto, ON</span>
+          </div>
+          <!-- <ul>
+            <li>Languages: Java, Python, MATLAB, C/C++, R, LaTeX</li>
+            <li>Libraries: SciPy, OpenCV, Pandas, Qiskit, PyTorch, PennyLane, GDSFactory</li>
+            <li>Certificates: IBM Basics of Quantum Information, Qiskit FallFest 2023, Laser Safety Training</li>
+            <li>Tools: COMSOL, CAD, Arduino, PCB design, lab instrumentation</li>
+          </ul> -->
+        </div>
+        <div class="about-me-photo-wrap">
+          <img src="assets/jeffrey.jpg" alt="Profile photo" class="hero-photo about-me-photo">
+        </div>
+      </div>
+    </section>
+<!-- 
     <section id="research" class="content-section">
       <h2>Research Interests</h2>
       <p>
-        I am especially interested in research directions that combine rigorous mathematical foundations with practical experiments.
+        My current work combines quantum photonics, experimental systems design, and ML-driven analysis.
       </p>
       <ul>
-        <li>Quantum computing and quantum information methods</li>
-        <li>Machine learning for scientific and technical domains</li>
-        <li>Robust evaluation and reproducible experimentation</li>
+        <li>Photon-pair generation and entanglement characterization in periodically poled silica fiber</li>
+        <li>Low-noise optical instrumentation, detector electronics, and timing systems</li>
+        <li>Quantum-enhanced machine learning, including diffusion-model acceleration with D-Wave</li>
       </ul>
-    </section>
+    </section> -->
 
     <section id="publications" class="content-section">
       <h2>Selected Publications</h2>
       <div class="pub-list">
         <article class="pub-item">
-          <h3>Title of Paper One</h3>
-          <p>Jeffrey Ming Han Li, Collaborator A, Collaborator B. <em>Conference/Journal, 2025.</em></p>
-          <a href="#" class="text-link">Paper</a>
-          <a href="#" class="text-link">Code</a>
+          <h3>Denoising CGI Renderings using Deep Learning</h3>
+          <p>H. Chen, J. Li. <em>CUCAI 2024, Kingston, ON, 2024.</em></p>
+          <a href="#" class="text-link">Conference Paper</a>
         </article>
         <article class="pub-item">
-          <h3>Title of Paper Two</h3>
-          <p>Jeffrey Ming Han Li, Collaborator C. <em>Conference/Journal, 2024.</em></p>
-          <a href="#" class="text-link">Paper</a>
-          <a href="#" class="text-link">Project Page</a>
+          <h3>Low-Noise, Vibration Minimized Optical Shutter Using DC Brushed Motor</h3>
+          <p>J. Li, B. Braverman. <em>UNERD 2024, Toronto, ON, 2024.</em></p>
+          <a href="#" class="text-link">Conference Poster</a>
+        </article>
+        <article class="pub-item">
+          <h3>Photon Pair Generation at 780 and 1560 nm in Periodically Poled Silica Fiber</h3>
+          <p>J. Li, A. C.B. Greenwood, Li Qian, et al. <em>CQIQC Research Day, Toronto, ON, 2025.</em></p>
+          <a href="#" class="text-link">Conference Poster</a>
         </article>
       </div>
     </section>
@@ -119,32 +135,44 @@
       <h2>Research Experience</h2>
       <div class="timeline">
         <article class="exp-block">
-          <p class="exp-meta">2024 - Present | University Lab, Boston, MA</p>
-          <h3>Graduate Research Assistant</h3>
+          <p class="exp-meta">May 2025 - Present | Qian Lab, University of Toronto</p>
+          <h3>Quantum Information Research Intern</h3>
           <ul>
-            <li>Built a benchmark pipeline for evaluating model robustness across distribution shifts.</li>
-            <li>Designed active-learning experiments that reduced labeling cost by 32%.</li>
-            <li>Collaborated with interdisciplinary teams to deploy prototypes in clinical settings.</li>
+            <li>Generated hyperentangled photon pairs via type-0 SPDC in pure-silica periodically poled silica fiber.</li>
+            <li>Designed and built an optical coincidence counting device with single-photon counting modules.</li>
+            <li>Programmed a quantum state tomography pipeline in MATLAB and Python with maximum-likelihood reconstruction.</li>
+            <li>Designed a low-jitter TTL gating circuit to suppress dark counts and improve coincidence-to-accidental ratio.</li>
           </ul>
         </article>
 
         <article class="exp-block">
-          <p class="exp-meta">Summer 2023 | Industry Research Group, San Francisco, CA</p>
-          <h3>Machine Learning Research Intern</h3>
+          <p class="exp-meta">May 2024 - May 2025 | Braverman Lab, University of Toronto</p>
+          <h3>Quantum Optics Research Intern</h3>
           <ul>
-            <li>Developed retrieval-augmented inference components for long-context QA tasks.</li>
-            <li>Improved inference latency by optimizing prompt routing and caching strategy.</li>
-            <li>Presented findings and authored internal technical documentation.</li>
+            <li>Simulated Hermite-Gaussian mode propagation through a spatial filtering system.</li>
+            <li>Optimized filters to achieve greater than 95% HG0 mode fidelity using dual annealing.</li>
+            <li>Built a Mach-Zehnder interferometer for filtered spatial-mode holography.</li>
+            <li>Modeled resonant modes in disordered optical cavities with COMSOL.</li>
+            <li>Trained a feedforward neural network to predict output wavelength with 1.2 nm mean squared error.</li>
           </ul>
         </article>
 
         <article class="exp-block">
-          <p class="exp-meta">2021 - 2023 | Data Science Lab, New York, NY</p>
-          <h3>Research Engineer</h3>
+          <p class="exp-meta">Sep 2024 - Present | UTMIST, University of Toronto</p>
+          <h3>QuDiffuse Project Lead</h3>
           <ul>
-            <li>Implemented end-to-end model training pipelines with reproducible experiment tracking.</li>
-            <li>Led data quality audits that improved downstream task performance.</li>
-            <li>Co-mentored junior students and contributed to open-source tooling.</li>
+            <li>Led QuDiffuse: applying D-Wave quantum annealing to accelerate DDPM training through RBM-based Markov chains.</li>
+            <li>Achieved 10x training speedup on MNIST compared to a classical DDPM baseline with classical QUBO solver.</li>
+            <li>Awarded Most Innovative Project at the UTMIST 2025 Showcase.</li>
+          </ul>
+        </article>
+
+        <article class="exp-block">
+          <p class="exp-meta">May 2024 - Present | IYPT Canada</p>
+          <h3>Research Supervisor, Canadian Physics Camp</h3>
+          <ul>
+            <li>Mentored Canada's national physics team, resulting in two bronze medals at IYPT 2024 and 2025.</li>
+            <li>Organized the national camp and delivered undergraduate-level experimental and theoretical lectures.</li>
           </ul>
         </article>
       </div>
@@ -153,8 +181,15 @@
     <section id="teaching" class="content-section">
       <h2>Teaching</h2>
       <p>
-        I share educational content in two formats: blog posts for longer explanations and PDF notes for concise references.
+        I actively mentor student researchers and contribute to technical training programs through camp supervision and structured lectures.
+        I document my school notes in the Notes section, and I document interesting findings in the Blog Section.
       </p>
+      <!-- <ul>
+        <li>CQIQC Undergraduate Fellowship - $10,000 research grant</li>
+        <li>ESROP-UofT Recipient - $7,000 research grant</li>
+        <li>Silver Medal, Online International Young Physicist Tournament (O-IYPT)</li>
+        <li>2x International Top 20, Sir Isaac Newton's Physics Exam</li>
+      </ul> -->
       <div class="social-row">
         <a class="social-btn" href="blogs.html">Go to Blogs</a>
         <a class="social-btn" href="notes.html">Go to Notes</a>
@@ -195,4 +230,3 @@
   </script>
 </body>
 </html>
-

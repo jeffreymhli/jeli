@@ -1,0 +1,92 @@
+JEFFREY LI B.A.SC ENGINEERING PHYSICS UOFT
+
+jeffreymh.li@mail.utoronto.ca (+1)647-613-0118
+
+Summary
+
+Skill
+
+Personal Website
+
+Hi! I am a third-year undergraduate Engineering Physics student at the University of Toronto, with strong interests
+
+Languages: Java, Python, MATLAB, C/C++, R, LATEX Libraries: Scipy, OpenCV, Pandas, Qiskit, Pytorch, Penny-
+
+in quantum computing, quantum information, and ma-
+
+Lane, GDS factory
+
+chine learning. I am particularly interested in pushing the
+
+Certificates: IBM Basics of Quantum Information, Qiskit
+
+boundaries of quantum hardware and its integration with
+
+FallFest 2023, Laser Safety Training Certificate
+
+classical machine learning models.
+
+Technologies: COMSOL, CAD, Arduino, PCB Design,
+
+Publication & Poster
+
+Power tools
+
+1. H.Chen,J. Li,(Nov. 30, 2023 - March 3, 2024) Denoising CGI Renderings using Deep Learning,CUCAI 2024 , Kingston , ON, 2024. [Conference Paper Link]
+2. J. Li, B. Braverman,(Aug 23, 2024) Low-Noise, Vibration Minimized Optical Shutter Using DC Brushed Motor, UNERD 2024, Toronto, ON, 2024. [Conference Poster Link]
+3. J. Li, A. C.B. Greenwood, Li Qian, et al. (Aug 15, 2025) Photon Pair Generation at 780 and 1560 nm in Periodically Poled Silica Fiber, CQIQC Research Day, Toronto, ON, 2025. [Conference Poster Link]
+
+Experience
+
+2025.05 - Present | Quantum Information Research Intern
+
+Qian Lab, UofT
+
+· Generated hyperentangled photon pairs via type-0 SPDC in pure-silica periodically poled silica fiber.
+
+· Designed and built an optical coincidence counting device using Excelitas SPCM and IDQube single-photon counting modules.
+
+· Programmed a quantum state tomography pipeline in MATLAB and Python,including maximum-likelihood density-matrix reconstruction and entanglement-metric evaluation.
+
+· Designed and fabricated a low-jitter TTL gating circuit for photon detector based on a monostable
+multivibrator to generate nanosecond-scale timing windows, suppress dark-counts, and increase
+coincidence-to-accidental ratio. [Matlab / PCB / Fiber Optics]
+
+2024.05 - 2025.05 | Quantum Optics Research Intern
+
+Braverman Lab, UofT
+
+· Simulated Hermite­Gaussian mode propagation through a spatial filtering system to analyze mode purity and phase evolution.
+
+· Optimized filter properties to achieve >95% HG0 mode fidelity using Dual Annealing optimization.
+
+· Constructed a Mach­Zehnder interferometer to perform holography of the filtered spatial mode
+
+· Modeled resonant modes in disordered optical cavities using COMSOL.
+
+· Trained a feedforward neural network to predict output wavelength from the disordered optical cavities, achieving a mean squared error of 1.2nm.
+
+· Designed and fabricated a low-vibration mechanical optical shutter with an 8 ms switching period and
+closed loop feedback calibration. [Scipy / COMSOL / Pytorch / PCB]
+
+2024.09 - Present | UTMIST QuDiffuse Project Lead
+
+UTMIST, UofT
+
+· QuDiffuse: Applying the D-Wave quantum annealer to accelerate Denoising Diffusion Probabilistic Model(DDPM) training by employing RBM in Markov chain
+
+· Achieved 10x training speedup on MNIST data set compared to classical DDPM using classical QUBO solver.
+
+· Awarded "Most Innovative Project" at UTMIST 2025 Showcase. [Pytorch / D-Wave]
+
+2024.05 - Present | Research Supervisor - IYPT Canadian Physics Camp · Mentored Canada's National Physics Team, resulting in two Bronze Medals at IYPT 2024 and 2025.
+· Organized the national camp, developed experimental/theoretical guidelines, and delivered undergraduate-level lectures. [Matlab / COMSOL]
+
+IYPT
+
+Award & Honor
+· CQIQC Undergraduate Fellowship - $10,000 research grant · ESROP-UofT Recipient - $7,000 research grant · Silver Medal, Online International Young Physicist Tournament(O-IYPT) · 2 x International Top 20, Sir Isaac Newton's Physics Exam
+
+2025.05 2024.05 2022.07 2022.04, 2023.04
+
+

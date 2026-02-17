@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Name | Notes</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Your Name</div>
+    <nav class="topnav">
+      <a href="index.html#about" class="jump-btn">About</a>
+      <a href="index.html#research" class="jump-btn">Research</a>
+      <a href="index.html#publications" class="jump-btn">Publications</a>
+      <a href="index.html#experience" class="jump-btn">Experience</a>
+      <a href="blogs.html" class="jump-btn">Blogs</a>
+      <a href="notes.html" class="jump-btn">Notes</a>
+    </nav>
+  </header>
+
+  <main class="page-wrap">
+    <section class="content-section">
+      <h1>Notes (PDF)</h1>
+      <p class="lead">This page auto-loads notes from <code>content/notes.json</code> (generated from <code>notes/</code>).</p>
+      <div class="note-list" id="note-list"></div>
+      <p class="empty-state" id="note-empty" hidden>No PDF files found in <code>notes/</code>.</p>
+    </section>
+  </main>
+  <script>
+    async function fetchJsonWithFallback(paths) {
+      for (const path of paths) {
+        try {
+          const response = await fetch(path);
+          if (!response.ok) continue;
+          const data = await response.json();
+          return data;
+        } catch {}
+      }
+      return null;
+    }
+
+    async function listDirectoryFiles(directory, extension) {
+      const response = await fetch(directory);
+      if (!response.ok) return [];
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const anchors = Array.from(doc.querySelectorAll("a[href]"));
+      return anchors
+        .map((a) => a.getAttribute("href"))
+        .filter((href) => href && href.toLowerCase().endsWith(extension))
+        .map((href) => decodeURIComponent(href))
+        .filter((href) => !href.includes("/"));
+    }
+
+    function titleFromFilename(filename) {
+      return filename
+        .replace(/\.pdf$/i, "")
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+    }
+
+    async function renderNotes() {
+      const listEl = document.getElementById("note-list");
+      const emptyEl = document.getElementById("note-empty");
+      try {
+        const raw = await fetchJsonWithFallback([
+          "content/notes.json",
+          "./content/notes.json",
+          "/content/notes.json"
+        ]);
+        if (!raw) {
+          const files = await listDirectoryFiles("notes/", ".pdf");
+          const fallbackNotes = files.map((file) => ({
+            path: `notes/${file}`,
+            title: titleFromFilename(file),
+            description: "PDF note"
+          }));
+          if (!fallbackNotes.length) {
+            throw new Error("No JSON index or directory listing.");
+          }
+          listEl.innerHTML = fallbackNotes
+            .map((note) => `
+              <article class="note-item">
+                <p>
+                  <strong>${note.title}</strong>
+                  ${note.description}
+                </p>
+                <a href="${note.path}" class="read-btn" target="_blank" rel="noreferrer">Open PDF</a>
+              </article>
+            `)
+            .join("");
+          return;
+        }
+        const notes = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+        if (!notes.length) {
+          emptyEl.hidden = false;
+          return;
+        }
+        listEl.innerHTML = notes
+          .map((note) => `
+            <article class="note-item">
+              <p>
+                <strong>${note.title || "Untitled Note"}</strong>
+                ${note.description || "Auto-detected from the notes folder."}
+              </p>
+              <a href="${note.path}" class="read-btn" target="_blank" rel="noreferrer">Open PDF</a>
+            </article>
+          `)
+          .join("");
+      } catch {
+        emptyEl.hidden = false;
+        emptyEl.textContent = "Could not load notes list. Make sure you started the server at repo root.";
+      }
+    }
+
+    renderNotes();
+  </script>
+</body>
+</html>

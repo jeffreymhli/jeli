@@ -1,0 +1,14 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-labelledby="title desc">
+  <title id="title">Profile placeholder</title>
+  <desc id="desc">Abstract portrait placeholder</desc>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f9dfb5" />
+      <stop offset="1" stop-color="#9fd6cf" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#g)" />
+  <circle cx="200" cy="150" r="70" fill="#f8f2e8" />
+  <path d="M80 340c20-70 75-100 120-100s100 30 120 100" fill="#f8f2e8" />
+  <text x="200" y="380" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#2b5556">Replace with your photo</text>
+</svg>

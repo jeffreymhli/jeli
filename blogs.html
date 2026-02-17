@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeffrey Ming Han Li | Blogs</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Jeffrey Ming Han Li</div>
+    <nav class="topnav">
+      <a href="index.html#about" class="jump-btn">About</a>
+      <a href="index.html#research" class="jump-btn">Research</a>
+      <a href="index.html#publications" class="jump-btn">Publications</a>
+      <a href="index.html#experience" class="jump-btn">Experience</a>
+      <a href="blogs.html" class="jump-btn">Blogs</a>
+      <a href="notes.html" class="jump-btn">Notes</a>
+    </nav>
+  </header>
+
+  <main class="page-wrap">
+    <section class="content-section">
+      <h1>Blogs</h1>
+      <p class="lead">This page auto-loads posts from <code>content/blogs.json</code> (generated from <code>blogs/</code>).</p>
+      <div class="cards" id="blog-list"></div>
+      <p class="empty-state" id="blog-empty" hidden>No blog posts found in <code>blogs/</code>.</p>
+    </section>
+  </main>
+  <script>
+    async function fetchJsonWithFallback(paths) {
+      for (const path of paths) {
+        try {
+          const response = await fetch(path);
+          if (!response.ok) continue;
+          const data = await response.json();
+          return data;
+        } catch {}
+      }
+      return null;
+    }
+
+    async function listDirectoryFiles(directory, extension) {
+      const response = await fetch(directory);
+      if (!response.ok) return [];
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const anchors = Array.from(doc.querySelectorAll("a[href]"));
+      return anchors
+        .map((a) => a.getAttribute("href"))
+        .filter((href) => href && href.toLowerCase().endsWith(extension))
+        .map((href) => decodeURIComponent(href))
+        .filter((href) => !href.includes("/"));
+    }
+
+    function titleFromFilename(filename) {
+      return filename
+        .replace(/\.html$/i, "")
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+    }
+
+    async function renderBlogs() {
+      const listEl = document.getElementById("blog-list");
+      const emptyEl = document.getElementById("blog-empty");
+      try {
+        const raw = await fetchJsonWithFallback([
+          "content/blogs.json",
+          "./content/blogs.json",
+          "/content/blogs.json"
+        ]);
+        if (!raw) {
+          const files = await listDirectoryFiles("blogs/", ".html");
+          const fallbackPosts = files.map((file) => ({
+            path: `blogs/${file}`,
+            title: titleFromFilename(file),
+            description: "HTML blog post"
+          }));
+          if (!fallbackPosts.length) {
+            throw new Error("No JSON index or directory listing.");
+          }
+          listEl.innerHTML = fallbackPosts
+            .map((post) => `
+              <article class="card">
+                <span class="meta-line">${post.path}</span>
+                <h3>${post.title}</h3>
+                <p>${post.description}</p>
+                <a href="${post.path}" class="read-btn">Read Post</a>
+              </article>
+            `)
+            .join("");
+          return;
+        }
+        const posts = Array.isArray(raw) ? raw : (raw ? [raw] : []);
+        if (!posts.length) {
+          emptyEl.hidden = false;
+          return;
+        }
+        listEl.innerHTML = posts
+          .map((post) => `
+            <article class="card">
+              <span class="meta-line">${post.date || post.path || ""}</span>
+              <h3>${post.title || "Untitled Post"}</h3>
+              <p>${post.description || "Auto-detected from the blogs folder."}</p>
+              <a href="${post.path}" class="read-btn">Read Post</a>
+            </article>
+          `)
+          .join("");
+      } catch {
+        emptyEl.hidden = false;
+        emptyEl.textContent = "Could not load blog list. Make sure you started the server at repo root.";
+      }
+    }
+
+    renderBlogs();
+  </script>
+</body>
+</html>

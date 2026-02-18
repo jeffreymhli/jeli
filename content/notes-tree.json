@@ -14,18 +14,6 @@
                                                   "type":  "PDF"
                                               }
                                           ]
-                        },
-                        {
-                            "code":  "general",
-                            "label":  "General",
-                            "documents":  [
-                                              {
-                                                  "path":  "notes/lab-meeting-template.pdf",
-                                                  "title":  "Lab Meeting Template",
-                                                  "date":  "2026-02-16",
-                                                  "type":  "PDF"
-                                              }
-                                          ]
                         }
                     ]
     },
@@ -107,6 +95,18 @@
                                                   "path":  "notes/year3/ece357/ece357.pdf",
                                                   "title":  "Ece357",
                                                   "date":  "2026-02-17",
+                                                  "type":  "PDF"
+                                              }
+                                          ]
+                        },
+                        {
+                            "code":  "test1",
+                            "label":  "Test1",
+                            "documents":  [
+                                              {
+                                                  "path":  "notes/year3/test1/lab-meeting-template.pdf",
+                                                  "title":  "Lab Meeting Template",
+                                                  "date":  "2026-02-16",
                                                   "type":  "PDF"
                                               }
                                           ]

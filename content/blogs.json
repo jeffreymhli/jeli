@@ -1,14 +1,25 @@
 ﻿[
     {
-        "path":  "blogs/ml-baselines.html",
-        "title":  "What Makes a Good ML Baseline",
-        "description":  "HTML blog post",
-        "date":  "2026-02-16"
-    },
-    {
         "path":  "blogs/research-planning.html",
         "title":  "How I Plan Research Projects",
         "description":  "HTML blog post",
-        "date":  "2026-02-16"
+        "date":  "2026-02-17",
+        "tags":  [
+                     "engineering",
+                     "computer",
+                     "optics",
+                     "research"
+                 ]
+    },
+    {
+        "path":  "blogs/ml-baselines.html",
+        "title":  "What Makes a Good ML Baseline",
+        "description":  "HTML blog post",
+        "date":  "2026-02-17",
+        "tags":  [
+                     "engineering",
+                     "computer",
+                     "machine learning"
+                 ]
     }
 ]

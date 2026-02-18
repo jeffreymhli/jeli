@@ -12,10 +12,9 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">Your Name</div>
+    <div class="brand">Jeffrey Ming Han Li</div>
     <nav class="topnav">
       <a href="index.html#about" class="jump-btn">About</a>
-      <a href="index.html#research" class="jump-btn">Research</a>
       <a href="index.html#publications" class="jump-btn">Publications</a>
       <a href="index.html#experience" class="jump-btn">Experience</a>
       <a href="blogs.html" class="jump-btn">Blogs</a>
@@ -25,10 +24,11 @@
 
   <main class="page-wrap">
     <section class="content-section">
-      <h1>Notes (PDF)</h1>
-      <p class="lead">This page auto-loads notes from <code>content/notes.json</code> (generated from <code>notes/</code>).</p>
-      <div class="note-list" id="note-list"></div>
-      <p class="empty-state" id="note-empty" hidden>No PDF files found in <code>notes/</code>.</p>
+      <h1>Notes</h1>
+      <p class="lead">This page includes my course notes through my time at EngSci. Enjoy</p>
+      <p class="note-last-updated" id="note-last-updated" hidden>Last updated: --</p>
+      <div class="note-browser" id="note-sections"></div>
+      <p class="empty-state" id="note-empty" hidden>No documents found in <code>notes/</code>.</p>
     </section>
   </main>
   <script>
@@ -44,77 +44,281 @@
       return null;
     }
 
-    async function listDirectoryFiles(directory, extension) {
-      const response = await fetch(directory);
-      if (!response.ok) return [];
-      const html = await response.text();
-      const doc = new DOMParser().parseFromString(html, "text/html");
-      const anchors = Array.from(doc.querySelectorAll("a[href]"));
-      return anchors
-        .map((a) => a.getAttribute("href"))
-        .filter((href) => href && href.toLowerCase().endsWith(extension))
-        .map((href) => decodeURIComponent(href))
-        .filter((href) => !href.includes("/"));
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    function titleFromFilename(filename) {
-      return filename
-        .replace(/\.pdf$/i, "")
-        .replace(/[-_]+/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase());
+    function toTitleCase(raw) {
+      return String(raw || "")
+        .replaceAll(/[-_]+/g, " ")
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+    }
+
+    function stripExt(filename) {
+      return String(filename || "").replace(/\.[^.]+$/, "");
+    }
+
+    function toSectionLabel(id) {
+      const raw = String(id || "").trim().toLowerCase();
+      if (!raw) return "General";
+      const yearMatch = raw.match(/^year\s*[-_]?(\d+)$/i);
+      if (yearMatch) return `Year ${yearMatch[1]}`;
+      if (raw === "general") return "General";
+      return toTitleCase(raw);
+    }
+
+    function sectionSortKey(section) {
+      const raw = String(section?.id || "").trim().toLowerCase();
+      if (raw === "general") return [0, 0, ""];
+      const yearMatch = raw.match(/^year\s*[-_]?(\d+)$/i);
+      if (yearMatch) return [1, Number(yearMatch[1]) || 0, ""];
+      return [2, 0, String(section?.label || raw)];
+    }
+
+    function sortSections(sections) {
+      return sections.slice().sort((a, b) => {
+        const [ag, an, as] = sectionSortKey(a);
+        const [bg, bn, bs] = sectionSortKey(b);
+        if (ag !== bg) return ag - bg;
+        if (an !== bn) return an - bn;
+        return as.localeCompare(bs);
+      });
+    }
+
+    function normalizeDocument(doc) {
+      const path = String(doc?.path || doc?.url || "").replaceAll("\\", "/");
+      if (!path) return null;
+      const title = doc?.title || toTitleCase(stripExt(path.split("/").pop() || "Document"));
+      return {
+        path,
+        title,
+        date: doc?.date || ""
+      };
+    }
+
+    function normalizeCourse(course) {
+      const documents = Array.isArray(course?.documents)
+        ? course.documents.map(normalizeDocument).filter(Boolean)
+        : [];
+      const code = String(course?.code || course?.id || course?.name || "").trim() || "general";
+      const label = String(course?.label || course?.title || toTitleCase(code)).trim();
+      return { code, label, documents };
+    }
+
+    function normalizeSection(section) {
+      const id = String(section?.id || section?.name || "").toLowerCase().trim() || "general";
+      const label = String(section?.label || section?.title || toSectionLabel(id)).trim();
+      const courses = Array.isArray(section?.courses)
+        ? section.courses.map(normalizeCourse)
+        : [];
+      return { id, label, courses };
+    }
+
+    function mapLegacyDocToBucket(doc) {
+      const normalizedDoc = normalizeDocument(doc);
+      if (!normalizedDoc) return null;
+      const parts = normalizedDoc.path.split("/").filter(Boolean);
+      let sectionId = "general";
+      let courseCode = "general";
+
+      if (parts[0]?.toLowerCase() === "notes") {
+        if (parts.length >= 4) {
+          sectionId = String(parts[1] || "general").toLowerCase();
+          courseCode = parts[2] || "general";
+        } else if (parts.length === 3) {
+          const maybeSection = String(parts[1] || "").toLowerCase();
+          const looksLikeSection = maybeSection === "general" || /^year\s*[-_]?\d+$/i.test(maybeSection);
+          if (looksLikeSection) {
+            sectionId = maybeSection;
+            courseCode = stripExt(parts[2]) || maybeSection;
+          } else {
+            courseCode = stripExt(parts[1]) || "general";
+          }
+        }
+      }
+
+      return { sectionId, courseCode, document: normalizedDoc };
+    }
+
+    function normalizeTree(raw) {
+      const candidateTree = Array.isArray(raw?.sections) ? raw.sections : raw;
+      if (Array.isArray(candidateTree) && candidateTree.every((entry) => entry && Array.isArray(entry.courses))) {
+        const normalizedSections = candidateTree.map(normalizeSection);
+        return sortSections(normalizedSections);
+      }
+
+      const legacyDocs = Array.isArray(candidateTree)
+        ? candidateTree
+        : (Array.isArray(raw?.documents) ? raw.documents : []);
+      const normalized = [{
+        id: "general",
+        label: "General",
+        courses: []
+      }];
+      const byId = { general: normalized[0] };
+
+      legacyDocs.forEach((doc) => {
+        const bucket = mapLegacyDocToBucket(doc);
+        if (!bucket) return;
+        const { sectionId, courseCode, document } = bucket;
+
+        if (!byId[sectionId]) {
+          byId[sectionId] = { id: sectionId, label: toSectionLabel(sectionId), courses: [] };
+          normalized.push(byId[sectionId]);
+        }
+        let course = byId[sectionId].courses.find((c) => c.code === courseCode);
+        if (!course) {
+          course = { code: courseCode, label: toTitleCase(courseCode), documents: [] };
+          byId[sectionId].courses.push(course);
+        }
+        course.documents.push(document);
+      });
+
+      return sortSections(normalized);
+    }
+
+    function renderNotesTree(sections) {
+      const sectionsEl = document.getElementById("note-sections");
+      const emptyEl = document.getElementById("note-empty");
+      const hasAnyDocs = sections.some((section) =>
+        Array.isArray(section.courses) &&
+        section.courses.some((course) => Array.isArray(course.documents) && course.documents.length)
+      );
+
+      if (!hasAnyDocs) {
+        sectionsEl.innerHTML = "";
+        emptyEl.hidden = false;
+        return;
+      }
+
+      emptyEl.hidden = true;
+      sectionsEl.innerHTML = sections
+        .map((section, index) => {
+          const courses = Array.isArray(section.courses) ? section.courses : [];
+          const documentCount = courses.reduce((count, course) => count + ((course.documents || []).length), 0);
+          return `
+            <details class="note-section" ${index === 0 ? "open" : ""}>
+              <summary>
+                <span class="note-summary-main">
+                  <span class="note-summary-title">${escapeHtml(section.label || section.id || "Section")}</span>
+                </span>
+                <span class="note-count">${courses.length} course${courses.length === 1 ? "" : "s"} | ${documentCount} doc${documentCount === 1 ? "" : "s"}</span>
+              </summary>
+              <div class="note-section-body">
+                <div class="note-course-grid">
+                ${
+                  courses.length
+                    ? courses.map((course) => `
+                        <article class="note-course-card">
+                          <div class="note-course-main">
+                            <h3>${escapeHtml(course.label || course.code || "Course")}</h3>
+                            <p class="note-course-meta">${(course.documents || []).length} document${(course.documents || []).length === 1 ? "" : "s"}</p>
+                          </div>
+                          <div class="note-doc-row">
+                            ${
+                              (course.documents || []).length
+                                ? course.documents.map((doc) => `
+                                    <a href="${escapeHtml(doc.path)}" class="read-btn note-doc-btn" target="_blank" rel="noreferrer">${escapeHtml(doc.title || "Open Document")}</a>
+                                  `).join("")
+                                : `<span class="empty-state">No documents.</span>`
+                            }
+                          </div>
+                        </article>
+                      `).join("")
+                    : `<p class="empty-state note-empty-block">No course folders found in this section yet.</p>`
+                }
+                </div>
+              </div>
+            </details>
+          `;
+        })
+        .join("");
+    }
+
+    function formatDateForDisplay(dateLike) {
+      const raw = String(dateLike || "").trim();
+      if (!raw) return "";
+      const parsed = new Date(`${raw}T00:00:00`);
+      if (Number.isNaN(parsed.getTime())) return raw;
+      return parsed.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+    }
+
+    function updateLastUpdated(sections) {
+      const lastUpdatedEl = document.getElementById("note-last-updated");
+      if (!lastUpdatedEl) return;
+
+      const timestamps = [];
+      sections.forEach((section) => {
+        (section.courses || []).forEach((course) => {
+          (course.documents || []).forEach((doc) => {
+            if (!doc?.date) return;
+            const parsed = new Date(`${String(doc.date).trim()}T00:00:00`);
+            if (!Number.isNaN(parsed.getTime())) {
+              timestamps.push(parsed.getTime());
+            }
+          });
+        });
+      });
+
+      if (!timestamps.length) {
+        lastUpdatedEl.hidden = true;
+        return;
+      }
+
+      const latest = new Date(Math.max(...timestamps));
+      const isoDate = latest.toISOString().slice(0, 10);
+      lastUpdatedEl.textContent = `Last updated: ${formatDateForDisplay(isoDate)}`;
+      lastUpdatedEl.hidden = false;
     }
 
     async function renderNotes() {
-      const listEl = document.getElementById("note-list");
       const emptyEl = document.getElementById("note-empty");
+      const lastUpdatedEl = document.getElementById("note-last-updated");
+      if (lastUpdatedEl) {
+        lastUpdatedEl.hidden = true;
+      }
       try {
         const raw = await fetchJsonWithFallback([
+          "content/notes-tree.json",
+          "./content/notes-tree.json",
+          "/content/notes-tree.json",
           "content/notes.json",
           "./content/notes.json",
           "/content/notes.json"
         ]);
+
         if (!raw) {
-          const files = await listDirectoryFiles("notes/", ".pdf");
-          const fallbackNotes = files.map((file) => ({
-            path: `notes/${file}`,
-            title: titleFromFilename(file),
-            description: "PDF note"
-          }));
-          if (!fallbackNotes.length) {
-            throw new Error("No JSON index or directory listing.");
-          }
-          listEl.innerHTML = fallbackNotes
-            .map((note) => `
-              <article class="note-item">
-                <p>
-                  <strong>${note.title}</strong>
-                  ${note.description}
-                </p>
-                <a href="${note.path}" class="read-btn" target="_blank" rel="noreferrer">Open PDF</a>
-              </article>
-            `)
-            .join("");
-          return;
+          throw new Error("No JSON index found.");
         }
-        const notes = Array.isArray(raw) ? raw : (raw ? [raw] : []);
-        if (!notes.length) {
+
+        const sections = normalizeTree(raw);
+        if (!sections.length) {
           emptyEl.hidden = false;
+          if (lastUpdatedEl) {
+            lastUpdatedEl.hidden = true;
+          }
           return;
         }
-        listEl.innerHTML = notes
-          .map((note) => `
-            <article class="note-item">
-              <p>
-                <strong>${note.title || "Untitled Note"}</strong>
-                ${note.description || "Auto-detected from the notes folder."}
-              </p>
-              <a href="${note.path}" class="read-btn" target="_blank" rel="noreferrer">Open PDF</a>
-            </article>
-          `)
-          .join("");
+        renderNotesTree(sections);
+        updateLastUpdated(sections);
       } catch {
         emptyEl.hidden = false;
-        emptyEl.textContent = "Could not load notes list. Make sure you started the server at repo root.";
+        if (lastUpdatedEl) {
+          lastUpdatedEl.hidden = true;
+        }
+        emptyEl.textContent = "Could not load notes list. Run scripts/update-content-index.ps1 and make sure server starts at repo root.";
       }
     }
 

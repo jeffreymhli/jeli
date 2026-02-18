@@ -1,6 +1,50 @@
-﻿{
-    "path":  "notes/lab-meeting-template.pdf",
-    "title":  "Lab Meeting Template",
-    "description":  "PDF note",
-    "date":  "2026-02-16"
-}
+﻿[
+    {
+        "path":  "notes/year3/mat389/mat389.pdf",
+        "title":  "Mat389",
+        "description":  "PDF document",
+        "date":  "2026-02-17"
+    },
+    {
+        "path":  "notes/year3/ece421/ece421.pdf",
+        "title":  "Ece421",
+        "description":  "PDF document",
+        "date":  "2026-02-17"
+    },
+    {
+        "path":  "notes/year3/ece357/ece357.pdf",
+        "title":  "Ece357",
+        "description":  "PDF document",
+        "date":  "2026-02-17"
+    },
+    {
+        "path":  "notes/year2/phy365/phy365.pdf",
+        "title":  "Phy365",
+        "description":  "PDF document",
+        "date":  "2026-02-17"
+    },
+    {
+        "path":  "notes/year2/ece259/ece259.pdf",
+        "title":  "Ece259",
+        "description":  "PDF document",
+        "date":  "2026-02-17"
+    },
+    {
+        "path":  "notes/year2/che260/che260.pdf",
+        "title":  "Che260",
+        "description":  "PDF document",
+        "date":  "2026-02-17"
+    },
+    {
+        "path":  "notes/general/quantum mechanics/quantum mechanics.pdf",
+        "title":  "Quantum Mechanics",
+        "description":  "PDF document",
+        "date":  "2026-02-17"
+    },
+    {
+        "path":  "notes/lab-meeting-template.pdf",
+        "title":  "Lab Meeting Template",
+        "description":  "PDF document",
+        "date":  "2026-02-16"
+    }
+]

@@ -1,0 +1,116 @@
+﻿[
+    {
+        "id":  "general",
+        "label":  "General",
+        "courses":  [
+                        {
+                            "code":  "quantum mechanics",
+                            "label":  "Quantum Mechanics",
+                            "documents":  [
+                                              {
+                                                  "path":  "notes/general/quantum mechanics/quantum mechanics.pdf",
+                                                  "title":  "Quantum Mechanics",
+                                                  "date":  "2026-02-17",
+                                                  "type":  "PDF"
+                                              }
+                                          ]
+                        },
+                        {
+                            "code":  "general",
+                            "label":  "General",
+                            "documents":  [
+                                              {
+                                                  "path":  "notes/lab-meeting-template.pdf",
+                                                  "title":  "Lab Meeting Template",
+                                                  "date":  "2026-02-16",
+                                                  "type":  "PDF"
+                                              }
+                                          ]
+                        }
+                    ]
+    },
+    {
+        "id":  "year2",
+        "label":  "Year 2",
+        "courses":  [
+                        {
+                            "code":  "phy365",
+                            "label":  "PHY365",
+                            "documents":  [
+                                              {
+                                                  "path":  "notes/year2/phy365/phy365.pdf",
+                                                  "title":  "Phy365",
+                                                  "date":  "2026-02-17",
+                                                  "type":  "PDF"
+                                              }
+                                          ]
+                        },
+                        {
+                            "code":  "ece259",
+                            "label":  "ECE259",
+                            "documents":  [
+                                              {
+                                                  "path":  "notes/year2/ece259/ece259.pdf",
+                                                  "title":  "Ece259",
+                                                  "date":  "2026-02-17",
+                                                  "type":  "PDF"
+                                              }
+                                          ]
+                        },
+                        {
+                            "code":  "che260",
+                            "label":  "CHE260",
+                            "documents":  [
+                                              {
+                                                  "path":  "notes/year2/che260/che260.pdf",
+                                                  "title":  "Che260",
+                                                  "date":  "2026-02-17",
+                                                  "type":  "PDF"
+                                              }
+                                          ]
+                        }
+                    ]
+    },
+    {
+        "id":  "year3",
+        "label":  "Year 3",
+        "courses":  [
+                        {
+                            "code":  "mat389",
+                            "label":  "MAT389",
+                            "documents":  [
+                                              {
+                                                  "path":  "notes/year3/mat389/mat389.pdf",
+                                                  "title":  "Mat389",
+                                                  "date":  "2026-02-17",
+                                                  "type":  "PDF"
+                                              }
+                                          ]
+                        },
+                        {
+                            "code":  "ece421",
+                            "label":  "ECE421",
+                            "documents":  [
+                                              {
+                                                  "path":  "notes/year3/ece421/ece421.pdf",
+                                                  "title":  "Ece421",
+                                                  "date":  "2026-02-17",
+                                                  "type":  "PDF"
+                                              }
+                                          ]
+                        },
+                        {
+                            "code":  "ece357",
+                            "label":  "ECE357",
+                            "documents":  [
+                                              {
+                                                  "path":  "notes/year3/ece357/ece357.pdf",
+                                                  "title":  "Ece357",
+                                                  "date":  "2026-02-17",
+                                                  "type":  "PDF"
+                                              }
+                                          ]
+                        }
+                    ]
+    }
+]

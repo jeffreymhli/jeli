@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="tags" content="engineering, computer, optics, research">
+  <title>How I Plan Research Projects</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Your Name</div>
+    <nav class="topnav">
+      <a href="../index.html" class="jump-btn">About</a>
+      <a href="../blogs.html" class="jump-btn">Blogs</a>
+      <a href="../notes.html" class="jump-btn">Notes</a>
+    </nav>
+  </header>
+
+  <main class="page-wrap">
+    <article class="content-section">
+      <span class="meta-line">January 16, 2026</span>
+      <div class="post-tag-list" id="post-tags"></div>
+      <h1>How I Plan Research Projects</h1>
+      <p>
+        A good project starts from one clear question, one measurable success metric, and one realistic delivery timeline.
+        I avoid broad goals early and instead define one minimum useful experiment.
+      </p>
+      <h2>Checklist</h2>
+      <ul>
+        <li>Define exact hypothesis and expected signal.</li>
+        <li>Write baseline setup before starting novelty work.</li>
+        <li>Track every run with reproducible configs.</li>
+        <li>Set a stop condition to avoid endless iteration.</li>
+      </ul>
+    </article>
+  </main>
+  <script>
+    (() => {
+      const holder = document.getElementById("post-tags");
+      const meta = document.querySelector('meta[name="tags"]');
+      if (!holder || !meta) return;
+      const tags = meta.content
+        .split(",")
+        .map((t) => t.trim())
+        .filter((t) => t.length > 0);
+      if (!tags.length) {
+        holder.remove();
+        return;
+      }
+      holder.innerHTML = tags.map((tag) => `<span class="post-tag">${tag}</span>`).join("");
+    })();
+  </script>
+</body>
+</html>
+

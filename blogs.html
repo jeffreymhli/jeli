@@ -15,7 +15,7 @@
     <div class="brand">Jeffrey Ming Han Li</div>
     <nav class="topnav">
       <a href="index.html#about" class="jump-btn">About</a>
-      <a href="index.html#research" class="jump-btn">Research</a>
+      <!-- <a href="index.html#research" class="jump-btn">Research</a> -->
       <a href="index.html#publications" class="jump-btn">Publications</a>
       <a href="index.html#experience" class="jump-btn">Experience</a>
       <a href="blogs.html" class="jump-btn">Blogs</a>
@@ -27,11 +27,122 @@
     <section class="content-section">
       <h1>Blogs</h1>
       <p class="lead">This page auto-loads posts from <code>content/blogs.json</code> (generated from <code>blogs/</code>).</p>
+      <div class="blog-controls">
+        <label class="blog-search-wrap" for="blog-search">
+          <span>Search</span>
+          <input id="blog-search" type="search" placeholder="Search title, date, or tags..." autocomplete="off">
+        </label>
+        <div class="blog-tag-row" id="blog-tags"></div>
+      </div>
       <div class="cards" id="blog-list"></div>
       <p class="empty-state" id="blog-empty" hidden>No blog posts found in <code>blogs/</code>.</p>
     </section>
   </main>
   <script>
+    const state = {
+      posts: [],
+      filtered: [],
+      query: "",
+      activeTags: new Set()
+    };
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function normalizeTagList(tags) {
+      if (!Array.isArray(tags)) return [];
+      return tags
+        .map((tag) => String(tag).trim())
+        .filter((tag) => tag.length > 0);
+    }
+
+    function postSearchBlob(post) {
+      const tags = normalizeTagList(post.tags);
+      return [
+        post.title || "",
+        post.description || "",
+        post.date || "",
+        ...tags
+      ].join(" ").toLowerCase();
+    }
+
+    function applyFilters() {
+      const q = state.query.trim().toLowerCase();
+      state.filtered = state.posts.filter((post) => {
+        const tags = normalizeTagList(post.tags);
+        const matchesQuery = !q || postSearchBlob(post).includes(q);
+        const matchesTags = state.activeTags.size === 0 || Array.from(state.activeTags).every((tag) => tags.includes(tag));
+        return matchesQuery && matchesTags;
+      });
+      renderPostCards(state.filtered);
+    }
+
+    function renderTagFilters(posts) {
+      const row = document.getElementById("blog-tags");
+      const allTags = Array.from(
+        new Set(posts.flatMap((post) => normalizeTagList(post.tags)))
+      ).sort((a, b) => a.localeCompare(b));
+
+      if (!allTags.length) {
+        row.innerHTML = "";
+        return;
+      }
+
+      row.innerHTML = `
+        <span class="blog-tag-label">Tags</span>
+        ${allTags.map((tag) => `
+          <button type="button" class="blog-tag-filter ${state.activeTags.has(tag) ? "is-active" : ""}" data-tag="${escapeHtml(tag)}">${escapeHtml(tag)}</button>
+        `).join("")}
+      `;
+
+      row.querySelectorAll(".blog-tag-filter").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tag = btn.dataset.tag;
+          if (!tag) return;
+          if (state.activeTags.has(tag)) {
+            state.activeTags.delete(tag);
+          } else {
+            state.activeTags.add(tag);
+          }
+          renderTagFilters(state.posts);
+          applyFilters();
+        });
+      });
+    }
+
+    function renderPostCards(posts) {
+      const listEl = document.getElementById("blog-list");
+      const emptyEl = document.getElementById("blog-empty");
+      if (!posts.length) {
+        listEl.innerHTML = "";
+        emptyEl.hidden = false;
+        emptyEl.textContent = "No posts match your search/filter.";
+        return;
+      }
+      emptyEl.hidden = true;
+      emptyEl.textContent = "No blog posts found in blogs/.";
+      listEl.innerHTML = posts
+        .map((post) => {
+          const tags = normalizeTagList(post.tags);
+          return `
+            <article class="card">
+              <span class="meta-line">${escapeHtml(post.date || post.path || "")}</span>
+              <h3>${escapeHtml(post.title || "Untitled Post")}</h3>
+              <p>${escapeHtml(post.description || "Auto-detected from the blogs folder.")}</p>
+              ${tags.length ? `<div class="post-tag-list">${tags.map((tag) => `<span class="post-tag">${escapeHtml(tag)}</span>`).join("")}</div>` : ""}
+              <a href="${escapeHtml(post.path || "#")}" class="read-btn">Read Post</a>
+            </article>
+          `;
+        })
+        .join("");
+    }
+
     async function fetchJsonWithFallback(paths) {
       for (const path of paths) {
         try {
@@ -65,7 +176,6 @@
     }
 
     async function renderBlogs() {
-      const listEl = document.getElementById("blog-list");
       const emptyEl = document.getElementById("blog-empty");
       try {
         const raw = await fetchJsonWithFallback([
@@ -78,21 +188,15 @@
           const fallbackPosts = files.map((file) => ({
             path: `blogs/${file}`,
             title: titleFromFilename(file),
-            description: "HTML blog post"
+            description: "HTML blog post",
+            tags: []
           }));
           if (!fallbackPosts.length) {
             throw new Error("No JSON index or directory listing.");
           }
-          listEl.innerHTML = fallbackPosts
-            .map((post) => `
-              <article class="card">
-                <span class="meta-line">${post.path}</span>
-                <h3>${post.title}</h3>
-                <p>${post.description}</p>
-                <a href="${post.path}" class="read-btn">Read Post</a>
-              </article>
-            `)
-            .join("");
+          state.posts = fallbackPosts;
+          renderTagFilters(state.posts);
+          applyFilters();
           return;
         }
         const posts = Array.isArray(raw) ? raw : (raw ? [raw] : []);
@@ -100,21 +204,22 @@
           emptyEl.hidden = false;
           return;
         }
-        listEl.innerHTML = posts
-          .map((post) => `
-            <article class="card">
-              <span class="meta-line">${post.date || post.path || ""}</span>
-              <h3>${post.title || "Untitled Post"}</h3>
-              <p>${post.description || "Auto-detected from the blogs folder."}</p>
-              <a href="${post.path}" class="read-btn">Read Post</a>
-            </article>
-          `)
-          .join("");
+        state.posts = posts.map((post) => ({
+          ...post,
+          tags: normalizeTagList(post.tags)
+        }));
+        renderTagFilters(state.posts);
+        applyFilters();
       } catch {
         emptyEl.hidden = false;
         emptyEl.textContent = "Could not load blog list. Make sure you started the server at repo root.";
       }
     }
+
+    document.getElementById("blog-search").addEventListener("input", (event) => {
+      state.query = event.target.value || "";
+      applyFilters();
+    });
 
     renderBlogs();
   </script>

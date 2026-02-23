@@ -1,5 +1,11 @@
 ﻿[
     {
+        "path":  "notes/year3/ece484/ece484.pdf",
+        "title":  "Ece484",
+        "description":  "PDF document",
+        "date":  "2026-02-23"
+    },
+    {
         "path":  "notes/year3/mat389/mat389.pdf",
         "title":  "Mat389",
         "description":  "PDF document",
@@ -40,11 +46,5 @@
         "title":  "Quantum Mechanics",
         "description":  "PDF document",
         "date":  "2026-02-17"
-    },
-    {
-        "path":  "notes/year3/test1/lab-meeting-template.pdf",
-        "title":  "Lab Meeting Template",
-        "description":  "PDF document",
-        "date":  "2026-02-16"
     }
 ]

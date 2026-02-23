@@ -64,6 +64,18 @@
         "label":  "Year 3",
         "courses":  [
                         {
+                            "code":  "ece484",
+                            "label":  "ECE484",
+                            "documents":  [
+                                              {
+                                                  "path":  "notes/year3/ece484/ece484.pdf",
+                                                  "title":  "Ece484",
+                                                  "date":  "2026-02-23",
+                                                  "type":  "PDF"
+                                              }
+                                          ]
+                        },
+                        {
                             "code":  "mat389",
                             "label":  "MAT389",
                             "documents":  [
@@ -95,18 +107,6 @@
                                                   "path":  "notes/year3/ece357/ece357.pdf",
                                                   "title":  "Ece357",
                                                   "date":  "2026-02-17",
-                                                  "type":  "PDF"
-                                              }
-                                          ]
-                        },
-                        {
-                            "code":  "test1",
-                            "label":  "Test1",
-                            "documents":  [
-                                              {
-                                                  "path":  "notes/year3/test1/lab-meeting-template.pdf",
-                                                  "title":  "Lab Meeting Template",
-                                                  "date":  "2026-02-16",
                                                   "type":  "PDF"
                                               }
                                           ]
